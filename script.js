@@ -1,12 +1,15 @@
 import circle from './circle.js';
 
 const can = document.getElementById('can');
+const slider = document.getElementById('myRange');
+const currentVal = document.getElementById('currentValue');
 can.width=window.innerWidth;
 can.height=window.innerHeight;
 console.log(window.innerWidth);
 const c = can.getContext('2d');
 const radius=10;
-const no=90;
+var no=slider.value;
+currentVal.innerText=no;
 const colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
 		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
 		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
@@ -19,19 +22,21 @@ window.addEventListener('resize',()=>{
   irclecan.height=window.innerHeight;
 })      
 
-      
+slider.addEventListener('change',sliderChange);      
       
 
 var total = [];
-for(let i=0;i<no;i++){
-  let x = Math.random()*innerWidth; 
-  let y = Math.random()*innerHeight;
-  let dx = (Math.random()-0.5)*6;
-  let dy = (Math.random()-0.5)*6;
-  let radius = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
-  let a = new circle(x,y,dx,dy,radius,colors[Math.floor(Math.random()*colors.length)]);
-  total.push(a); 
-  a.draw();
+function init(){
+  for(let i=0;i<no;i++){
+    let x = Math.random()*innerWidth; 
+    let y = Math.random()*innerHeight;
+    let dx = (Math.random()-0.5)*6;
+    let dy = (Math.random()-0.5)*6;
+    let radius = Math.floor(Math.random() * (8 - 3 + 1)) + 3;
+    let a = new circle(x,y,dx,dy,radius,colors[Math.floor(Math.random()*colors.length)]);
+    total.push(a); 
+    a.draw();
+  }
 }
 
 function anim(){
@@ -41,6 +46,15 @@ function anim(){
   total[i].update();
   }
 }
-
+init();
 anim();
 
+
+function sliderChange(e){
+  console.log(e.target.value);
+  no=e.target.value;
+  currentVal.innerText=no;
+  total=[];
+  c.clearRect(0,0,innerWidth,innerHeight);
+  init();
+}
